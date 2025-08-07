@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class City(
-    @SerialName("name")
-    val name: String,
+data class UsersLikeContentsResponse(
+    @SerialName("contents")
+    val contents: List<UsersLikeContentResponse>,
 )

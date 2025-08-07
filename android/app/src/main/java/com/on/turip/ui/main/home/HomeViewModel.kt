@@ -8,10 +8,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.on.turip.di.RepositoryModule
-import com.on.turip.domain.content.PopularFavoriteContent
+import com.on.turip.domain.content.UsersLikeContent
 import com.on.turip.domain.content.repository.ContentRepository
 import com.on.turip.domain.region.RegionCategory
-import com.on.turip.domain.region.RegionRepository
+import com.on.turip.domain.region.repository.RegionRepository
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -25,9 +25,9 @@ class HomeViewModel(
     private val _isSelectedDomestic: MutableLiveData<Boolean> = MutableLiveData()
     val isSelectedDomestic: LiveData<Boolean> get() = _isSelectedDomestic
 
-    private val _usersLikeContents: MutableLiveData<List<PopularFavoriteContent>> =
+    private val _usersLikeContents: MutableLiveData<List<UsersLikeContent>> =
         MutableLiveData()
-    val usersLikeContents: LiveData<List<PopularFavoriteContent>> get() = _usersLikeContents
+    val usersLikeContents: LiveData<List<UsersLikeContent>> get() = _usersLikeContents
 
     init {
         loadUsersLikeContents()
@@ -38,9 +38,9 @@ class HomeViewModel(
         viewModelScope.launch {
             contentRepository
                 .loadPopularFavoriteContents()
-                .onSuccess { popularFavoriteContents: List<PopularFavoriteContent> ->
-                    _usersLikeContents.value = popularFavoriteContents
-                    Timber.d("$popularFavoriteContents")
+                .onSuccess { contents: List<UsersLikeContent> ->
+                    _usersLikeContents.value = contents
+                    Timber.d("$contents")
                 }.onFailure {
                     Timber.e("${it.message}")
                 }

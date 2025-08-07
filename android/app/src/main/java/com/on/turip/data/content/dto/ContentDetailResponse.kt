@@ -1,16 +1,17 @@
 package com.on.turip.data.content.dto
 
+import com.on.turip.data.creator.dto.CreatorResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ContentDetailResponse(
     @SerialName("city")
-    val city: City,
+    val city: CityResponse,
     @SerialName("creator")
-    val creator: Creator,
+    val creator: CreatorResponse,
     @SerialName("id")
-    val id: Int,
+    val id: Long,
     @SerialName("isFavorite")
     val isFavorite: Boolean,
     @SerialName("title")

@@ -27,10 +27,11 @@ import turip.content.controller.dto.response.WeeklyPopularFavoriteContentRespons
 import turip.content.controller.dto.response.WeeklyPopularFavoriteContentsResponse;
 import turip.content.domain.Content;
 import turip.content.repository.ContentRepository;
-import turip.exception.NotFoundException;
 import turip.favorite.repository.FavoriteRepository;
 import turip.member.domain.Member;
 import turip.member.repository.MemberRepository;
+import turip.exception.custom.BadRequestException;
+import turip.exception.custom.NotFoundException;
 import turip.regioncategory.domain.DomesticRegionCategory;
 import turip.regioncategory.domain.OverseasRegionCategory;
 import turip.tripcourse.service.TripCourseService;
@@ -146,7 +147,11 @@ public class ContentService {
             return contentRepository.countByCityName(regionCategory);
         }
 
-        return contentRepository.countByCityCountryName(regionCategory);
+        if (OverseasRegionCategory.containsName(regionCategory)) {
+            return contentRepository.countByCityCountryName(regionCategory);
+        }
+
+        throw new BadRequestException("지역 카테고리가 올바르지 않습니다.");
     }
 
     private int calculateDomesticEtcCount() {

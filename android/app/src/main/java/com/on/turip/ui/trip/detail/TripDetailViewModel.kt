@@ -9,10 +9,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.on.turip.di.RepositoryModule
-import com.on.turip.domain.content.City
 import com.on.turip.domain.content.Content
 import com.on.turip.domain.content.repository.ContentRepository
-import com.on.turip.domain.content.video.VideoData
 import com.on.turip.domain.creator.Creator
 import com.on.turip.domain.creator.repository.CreatorRepository
 import com.on.turip.domain.favorite.usecase.UpdateFavoriteUseCase
@@ -68,26 +66,19 @@ class TripDetailViewModel(
         viewModelScope.launch {
             val deferredCreator: Deferred<Result<Creator>> =
                 async { creatorRepository.loadCreator(creatorId) }
-            val deferredVideoData: Deferred<Result<VideoData>> =
+            val deferredVideoData: Deferred<Result<Content>> =
                 async { contentRepository.loadContent(contentId) }
 
             val creatorResult: Result<Creator> = deferredCreator.await()
-            val videoDataResult: Result<VideoData> = deferredVideoData.await()
+            val videoDataResult: Result<Content> = deferredVideoData.await()
 
             creatorResult
                 .onSuccess { creator: Creator ->
                     videoDataResult
-                        .onSuccess { videoData: VideoData ->
-                            _content.value =
-                                content.value?.copy(
-                                    id = contentId,
-                                    creator = creator,
-                                    videoData = videoData,
-                                    city = City("// TODO 지역 여기서 받아와서 연결"),
-                                )
-                            _videoUri.value = videoData.url
-                            _isFavorite.value = videoData.isFavorite
-                            Timber.d("영상 제작자, 비디오 정보 불러오기 성공")
+                        .onSuccess { result: Content ->
+                            _content.value = result
+                            _videoUri.value = result.videoData.url
+                            _isFavorite.value = result.isFavorite
                         }.onFailure {
                             Timber.e("${it.message}")
                         }

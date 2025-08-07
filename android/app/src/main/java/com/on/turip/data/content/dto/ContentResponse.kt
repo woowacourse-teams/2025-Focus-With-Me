@@ -17,4 +17,6 @@ data class ContentResponse(
     val url: String,
     @SerialName("city")
     val city: CityResponse,
+    @SerialName("isFavorite")
+    val isFavorite: Boolean,
 )

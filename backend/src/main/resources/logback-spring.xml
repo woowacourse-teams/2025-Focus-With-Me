@@ -10,6 +10,7 @@
                 <timestamp>
                     <fieldName>timestamp</fieldName>
                     <pattern>yyyy-MM-dd HH:mm:ss.SSS</pattern>
+                    <timeZone>Asia/Seoul</timeZone>
                 </timestamp>
 
                 <logLevel>
@@ -20,8 +21,14 @@
                     <fieldName>message</fieldName>
                 </message>
 
+                <stackTrace>
+                    <fieldName>stacktrace</fieldName>
+                </stackTrace>
+
                 <mdc>
                     <includeMdcKeyName>traceId</includeMdcKeyName>
+                    <includeMdcKeyName>remoteAddr</includeMdcKeyName>
+                    <includeMdcKeyName>userAgent</includeMdcKeyName>
                     <includeMdcKeyName>method</includeMdcKeyName>
                     <includeMdcKeyName>uri</includeMdcKeyName>
                     <includeMdcKeyName>httpStatus</includeMdcKeyName>
@@ -38,6 +45,7 @@
                 <timestamp>
                     <fieldName>timestamp</fieldName>
                     <pattern>yyyy-MM-dd HH:mm:ss.SSS</pattern>
+                    <timeZone>Asia/Seoul</timeZone>
                 </timestamp>
 
                 <logLevel>
@@ -48,8 +56,14 @@
                     <fieldName>message</fieldName>
                 </message>
 
+                <stackTrace>
+                    <fieldName>stacktrace</fieldName>
+                </stackTrace>
+
                 <mdc>
                     <includeMdcKeyName>traceId</includeMdcKeyName>
+                    <includeMdcKeyName>remoteAddr</includeMdcKeyName>
+                    <includeMdcKeyName>userAgent</includeMdcKeyName>
                     <includeMdcKeyName>method</includeMdcKeyName>
                     <includeMdcKeyName>uri</includeMdcKeyName>
                     <includeMdcKeyName>httpStatus</includeMdcKeyName>

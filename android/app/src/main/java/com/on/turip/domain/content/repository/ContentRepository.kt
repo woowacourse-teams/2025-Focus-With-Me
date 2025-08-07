@@ -1,8 +1,8 @@
 package com.on.turip.domain.content.repository
 
+import com.on.turip.domain.content.Content
 import com.on.turip.domain.content.PagedContentsResult
-import com.on.turip.domain.content.PopularFavoriteContent
-import com.on.turip.domain.content.video.VideoData
+import com.on.turip.domain.content.UsersLikeContent
 
 interface ContentRepository {
     suspend fun loadContentsSizeByRegion(region: String): Result<Int>
@@ -21,7 +21,7 @@ interface ContentRepository {
         lastId: Long,
     ): Result<PagedContentsResult>
 
-    suspend fun loadContent(contentId: Long): Result<VideoData>
+    suspend fun loadContent(contentId: Long): Result<Content>
 
-    suspend fun loadPopularFavoriteContents(): Result<List<PopularFavoriteContent>>
+    suspend fun loadPopularFavoriteContents(size: Int = 5): Result<List<UsersLikeContent>>
 }

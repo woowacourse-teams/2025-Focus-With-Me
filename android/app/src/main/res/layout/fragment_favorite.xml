@@ -25,6 +25,18 @@
             app:layout_constraintStart_toStartOf="@id/cl_favorite_toolbar"
             app:layout_constraintTop_toTopOf="@id/cl_favorite_toolbar" />
 
+        <ImageView
+            android:id="@+id/iv_favorite_inquire"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:contentDescription="@null"
+            android:padding="16dp"
+            android:src="@drawable/ic_inquire"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/cl_favorite_toolbar" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

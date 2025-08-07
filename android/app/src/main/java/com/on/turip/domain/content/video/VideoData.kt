@@ -4,5 +4,4 @@ data class VideoData(
     val title: String,
     val url: String,
     val uploadedDate: String,
-    val isFavorite: Boolean = false,
 )

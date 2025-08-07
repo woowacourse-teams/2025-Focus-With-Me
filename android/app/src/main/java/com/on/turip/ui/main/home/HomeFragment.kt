@@ -13,7 +13,7 @@ import androidx.fragment.app.viewModels
 import com.on.turip.R
 import com.on.turip.databinding.FragmentHomeBinding
 import com.on.turip.domain.content.Content
-import com.on.turip.domain.content.PopularFavoriteContent
+import com.on.turip.domain.content.UsersLikeContent
 import com.on.turip.domain.region.RegionCategory
 import com.on.turip.ui.common.ItemSpaceDecoration
 import com.on.turip.ui.common.base.BaseFragment
@@ -102,7 +102,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             binding.tvHomeDomesticButton.isSelected = isSelectedDomestic
             binding.tvHomeAbroadButton.isSelected = isSelectedDomestic.not()
         }
-        viewModel.usersLikeContents.observe(viewLifecycleOwner) { usersLikeContents: List<PopularFavoriteContent> ->
+        viewModel.usersLikeContents.observe(viewLifecycleOwner) { usersLikeContents: List<UsersLikeContent> ->
             usersLikeContentAdapter.submitList(usersLikeContents)
         }
     }

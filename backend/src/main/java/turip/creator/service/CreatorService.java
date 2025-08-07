@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import turip.creator.controller.dto.response.CreatorResponse;
 import turip.creator.domain.Creator;
 import turip.creator.repository.CreatorRepository;
-import turip.exception.NotFoundException;
+import turip.exception.custom.NotFoundException;
 
 @Service
 @RequiredArgsConstructor

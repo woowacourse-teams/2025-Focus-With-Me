@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.on.turip.R
 import com.on.turip.databinding.ItemUsersLikeContentBinding
 import com.on.turip.domain.content.Content
-import com.on.turip.domain.content.PopularFavoriteContent
+import com.on.turip.domain.content.UsersLikeContent
+import com.on.turip.ui.common.TuripUrlConverter
 import com.on.turip.ui.common.loadRoundedCornerImage
 
 class UsersLikeContentViewHolder(
@@ -21,24 +22,24 @@ class UsersLikeContentViewHolder(
         }
     }
 
-    fun bind(popularFavoriteContent: PopularFavoriteContent) {
-        this.content = popularFavoriteContent.content
+    fun bind(usersLikeContent: UsersLikeContent) {
+        this.content = usersLikeContent.content
         binding.apply {
-            tvUsersLikeContentTitle.text = popularFavoriteContent.content.videoData.title
-            tvUsersLikeContentRegion.text = popularFavoriteContent.city
-            tvUsersLikeContentChannelName.text = popularFavoriteContent.content.creator.channelName
+            tvUsersLikeContentTitle.text = usersLikeContent.content.videoData.title
+            tvUsersLikeContentRegion.text = usersLikeContent.content.city.name
+            tvUsersLikeContentChannelName.text = usersLikeContent.content.creator.channelName
             ivUsersLikeContentThumbnail.loadRoundedCornerImage(
-                imageUrl = popularFavoriteContent.content.videoData.url,
+                imageUrl = TuripUrlConverter.convertVideoThumbnailUrl(usersLikeContent.content.videoData.url),
                 radius = 12,
             )
             tvUsersLikeContentDescription.text =
                 itemView.context.getString(
                     R.string.all_video_description,
-                    popularFavoriteContent.content.videoData.uploadedDate,
+                    usersLikeContent.content.videoData.uploadedDate,
                     itemView.context.getString(
                         R.string.all_travel_duration,
-                        popularFavoriteContent.trip.tripDuration.nights,
-                        popularFavoriteContent.trip.tripDuration.days,
+                        usersLikeContent.tripDuration.nights,
+                        usersLikeContent.tripDuration.days,
                     ),
                 )
         }

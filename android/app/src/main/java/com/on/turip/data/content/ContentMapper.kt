@@ -7,12 +7,16 @@ import com.on.turip.data.content.dto.ContentResponse
 import com.on.turip.data.content.dto.ContentsInformationResponse
 import com.on.turip.data.content.dto.CreatorInformationResponse
 import com.on.turip.data.content.dto.TripDurationInformationResponse
-import com.on.turip.domain.content.City
+import com.on.turip.data.content.dto.UsersLikeContentResponse
+import com.on.turip.data.content.dto.UsersLikeContentsResponse
+import com.on.turip.data.creator.toDomain
 import com.on.turip.domain.content.Content
 import com.on.turip.domain.content.PagedContentsResult
+import com.on.turip.domain.content.UsersLikeContent
 import com.on.turip.domain.content.video.VideoData
 import com.on.turip.domain.content.video.VideoInformation
 import com.on.turip.domain.creator.Creator
+import com.on.turip.domain.region.City
 import com.on.turip.domain.trip.Trip
 import com.on.turip.domain.trip.TripDuration
 
@@ -41,10 +45,9 @@ fun ContentResponse.toDomain(): Content =
                 title = title,
                 url = url,
                 uploadedDate = uploadedDate,
-                isFavorite = false,
-                // TODO : isFavorite 나중에 검색 결과에서도 찜 현황 보여주고 싶을 때 서버에서 받아오기
             ),
         city = city.toDomain(),
+        isFavorite = isFavorite,
     )
 
 fun CityResponse.toDomain(): City =
@@ -65,10 +68,24 @@ fun CreatorInformationResponse.toDomain(): Creator =
         profileImage = profileImage,
     )
 
-fun ContentDetailResponse.toDomain(): VideoData =
-    VideoData(
-        title = title,
-        url = url,
-        uploadedDate = uploadedDate,
+fun ContentDetailResponse.toDomain(): Content =
+    Content(
+        id = id,
+        creator = creator.toDomain(),
+        videoData =
+            VideoData(
+                title = title,
+                url = url,
+                uploadedDate = uploadedDate,
+            ),
+        city = city.toDomain(),
         isFavorite = isFavorite,
+    )
+
+fun UsersLikeContentsResponse.toDomain(): List<UsersLikeContent> = contents.map { it.toDomain() }
+
+fun UsersLikeContentResponse.toDomain(): UsersLikeContent =
+    UsersLikeContent(
+        content = content.toDomain(),
+        tripDuration = tripDuration.toDomain(),
     )

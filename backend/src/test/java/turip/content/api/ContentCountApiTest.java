@@ -147,5 +147,26 @@ class ContentCountApiTest {
                     .statusCode(200)
                     .body("count", is(2)); // 태국, 싱가포르
         }
+
+        @DisplayName("존재하지 않는 카테고리로 탐색하는 경우 400 Bad Request 코드를 응답한다")
+        @Test
+        void getCountByRegionCategory_withInvalidCategory_returnsBadRequest() {
+            // given
+            jdbcTemplate.update(
+                    "INSERT INTO creator (profile_image, channel_name) VALUES ('https://image.example.com/creator1.jpg', 'TravelMate')");
+            jdbcTemplate.update("INSERT INTO country (name) VALUES ('일본')");
+            jdbcTemplate.update("INSERT INTO country (name) VALUES ('태국')");
+            jdbcTemplate.update("INSERT INTO country (name) VALUES ('싱가포르')");
+            jdbcTemplate.update("INSERT INTO city (name, country_id) VALUES ('도쿄', 1)");
+            jdbcTemplate.update("INSERT INTO city (name, country_id) VALUES ('방콕', 2)");
+            jdbcTemplate.update("INSERT INTO city (name, country_id) VALUES ('싱가포르시티', 3)");
+            
+            // when & then
+            RestAssured.given().port(port)
+                    .queryParam("regionCategory", "아라키스")
+                    .when().get("/contents/count")
+                    .then()
+                    .statusCode(400);
+        }
     }
 } 

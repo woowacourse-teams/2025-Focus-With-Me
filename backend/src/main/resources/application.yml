@@ -17,6 +17,7 @@ spring:
         - classpath:jejueddy_gangwon_sokcho_data.sql
         - classpath:yeoconam_seoul_data.sql
         - classpath:jejueddy_posak_date.sql
+        - classpath:favorite.sql
 
   jpa:
     show-sql: true

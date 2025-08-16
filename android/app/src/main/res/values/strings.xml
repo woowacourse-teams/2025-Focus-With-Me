@@ -8,6 +8,11 @@
     <string name="all_loading">로딩 중…</string>
     <string name="all_video_description">%s · %s</string>
     <string name="all_snackbar_close">닫기</string>
+    <string name="all_confirm">확인</string>
+    <string name="all_folder_name_error_duplicate">중복된 폴더명이 존재합니다.</string>
+    <string name="all_folder_name_error_default_folder">기본 폴더 라는 이름이 존재합니다.</string>
+    <string name="all_folder_name_error_out_of_bound">폴더명은 1 ~ 20 글자 범위 입니다.</string>
+    <string name="all_folder_name_warning_max_length">폴더명은 최대 20글자 입니다.(현재 20 글자)</string>
 
     <!-- 바텀 네비게이션 -->
     <string name="bottom_navigation_home">홈</string>
@@ -49,6 +54,12 @@
     <string name="trip_detail_snackbar_favorite_save">컨텐츠 찜 목록에 저장했어요</string>
     <string name="trip_detail_snackbar_favorite_remove">컨텐츠 찜 목록에서 삭제했어요</string>
 
+    <!-- 폴더 페이지 -->
+    <string name="folder_title">폴더 편집</string>
+    <string name="bottom_sheet_folder_add_title">폴더 추가</string>
+    <string name="bottom_sheet_folder_add_folder_name_hint">폴더명을 입력해주세요.</string>
+    <string name="bottom_sheet_folder_modify_title">폴더 수정</string>
+    <string name="bottom_sheet_folder_modify_folder_name_hint">폴더명을 입력해주세요.</string>
 
     <string name="main_double_back_pressed_to_exit">한 번 더 누르면 종료됩니다.</string>
 

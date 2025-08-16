@@ -17,6 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.folder.FolderActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.search.keywordresult.SearchActivity"
             android:exported="false" />
         <activity

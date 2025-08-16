@@ -11,25 +11,30 @@ import turip.exception.custom.NotFoundException;
 import turip.favoritefolder.controller.dto.request.FavoriteFolderNameRequest;
 import turip.favoritefolder.controller.dto.request.FavoriteFolderRequest;
 import turip.favoritefolder.controller.dto.response.FavoriteFolderResponse;
+import turip.favoritefolder.controller.dto.response.FavoriteFolderWithFavoriteStatusResponse;
 import turip.favoritefolder.controller.dto.response.FavoriteFolderWithPlaceCountResponse;
+import turip.favoritefolder.controller.dto.response.FavoriteFoldersWithFavoriteStatusResponse;
 import turip.favoritefolder.controller.dto.response.FavoriteFoldersWithPlaceCountResponse;
 import turip.favoritefolder.domain.FavoriteFolder;
 import turip.favoritefolder.repository.FavoriteFolderRepository;
 import turip.favoriteplace.repository.FavoritePlaceRepository;
 import turip.member.domain.Member;
-import turip.member.repository.MemberRepository;
+import turip.member.service.MemberService;
+import turip.place.domain.Place;
+import turip.place.repository.PlaceRepository;
 
 @Service
 @RequiredArgsConstructor
 public class FavoriteFolderService {
 
     private final FavoriteFolderRepository favoriteFolderRepository;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final FavoritePlaceRepository favoritePlaceRepository;
+    private final PlaceRepository placeRepository;
 
     @Transactional
     public FavoriteFolderResponse createCustomFavoriteFolder(FavoriteFolderRequest request, String deviceFid) {
-        Member member = findOrCreateMember(deviceFid);
+        Member member = memberService.findOrCreateMember(deviceFid);
         FavoriteFolder favoriteFolder = FavoriteFolder.customFolderOf(member, request.name());
 
         validateDuplicatedName(favoriteFolder.getName(), member);
@@ -39,7 +44,7 @@ public class FavoriteFolderService {
     }
 
     public FavoriteFoldersWithPlaceCountResponse findAllByDeviceFid(String deviceFid) {
-        Member member = findOrCreateMember(deviceFid);
+        Member member = memberService.findOrCreateMember(deviceFid);
         List<FavoriteFolderWithPlaceCountResponse> favoriteFoldersWithPlaceCount = favoriteFolderRepository.findAllByMember(
                         member).stream()
                 .map(favoriteFolder -> {
@@ -51,10 +56,27 @@ public class FavoriteFolderService {
         return FavoriteFoldersWithPlaceCountResponse.from(favoriteFoldersWithPlaceCount);
     }
 
+    public FavoriteFoldersWithFavoriteStatusResponse findAllWithFavoriteStatusByDeviceId(String deviceFid,
+                                                                                         Long placeId) {
+        Member member = memberService.findOrCreateMember(deviceFid);
+        Place place = getPlaceById(placeId);
+
+        List<FavoriteFolderWithFavoriteStatusResponse> favoriteFoldersWithFavoriteStatus = favoriteFolderRepository.findAllByMember(
+                        member).stream()
+                .map(favoriteFolder -> {
+                    boolean isFavoritePlace = favoritePlaceRepository.existsByFavoriteFolderAndPlace(favoriteFolder,
+                            place);
+                    return FavoriteFolderWithFavoriteStatusResponse.of(favoriteFolder, isFavoritePlace);
+                })
+                .toList();
+
+        return FavoriteFoldersWithFavoriteStatusResponse.from(favoriteFoldersWithFavoriteStatus);
+    }
+
     @Transactional
     public FavoriteFolderResponse updateName(String deviceFid, Long favoriteFolderId,
                                              FavoriteFolderNameRequest request) {
-        Member member = getMemberByDeviceId(deviceFid);
+        Member member = memberService.getMemberByDeviceId(deviceFid);
         FavoriteFolder favoriteFolder = getById(favoriteFolderId);
         if (favoriteFolder.isDefault()) {
             throw new BadRequestException("기본 폴더는 수정할 수 없습니다.");
@@ -70,7 +92,7 @@ public class FavoriteFolderService {
 
     @Transactional
     public void remove(String deviceFid, Long favoriteFolderId) {
-        Member member = getMemberByDeviceId(deviceFid);
+        Member member = memberService.getMemberByDeviceId(deviceFid);
         FavoriteFolder favoriteFolder = getById(favoriteFolderId);
 
         if (favoriteFolder.isDefault()) {
@@ -81,30 +103,20 @@ public class FavoriteFolderService {
         favoriteFolderRepository.deleteById(favoriteFolderId);
     }
 
-    private Member findOrCreateMember(String deviceFid) {
-        return memberRepository.findByDeviceFid(deviceFid)
-                .orElseGet(() -> {
-                    Member savedMember = memberRepository.save(new Member(deviceFid));
-                    FavoriteFolder defaultFolder = FavoriteFolder.defaultFolderOf(savedMember);
-                    favoriteFolderRepository.save(defaultFolder);
-                    return savedMember;
-                });
-    }
-
     private void validateDuplicatedName(String folderName, Member member) {
         if (favoriteFolderRepository.existsByNameAndMember(folderName, member)) {
             throw new ConflictException("중복된 폴더 이름이 존재합니다.");
         }
     }
 
+    private Place getPlaceById(Long id) {
+        return placeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("해당 id에 대한 장소가 존재하지 않습니다."));
+    }
+
     private FavoriteFolder getById(Long favoriteFolderId) {
         return favoriteFolderRepository.findById(favoriteFolderId)
                 .orElseThrow(() -> new NotFoundException("해당 id에 대한 폴더가 존재하지 않습니다."));
-    }
-
-    private Member getMemberByDeviceId(String deviceFid) {
-        return memberRepository.findByDeviceFid(deviceFid)
-                .orElseThrow(() -> new NotFoundException("해당 id에 대한 회원이 존재하지 않습니다."));
     }
 
     private void validateOwnership(Member requestMember, FavoriteFolder favoriteFolder) {

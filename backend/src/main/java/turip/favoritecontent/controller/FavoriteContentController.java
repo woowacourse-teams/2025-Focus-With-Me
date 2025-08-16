@@ -72,25 +72,6 @@ public class FavoriteContentController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "400",
-                    description = "실패 예시",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponse.class),
-                            examples = {
-                                    @ExampleObject(
-                                            name = "already_favorite",
-                                            summary = "이미 찜 한 컨텐츠",
-                                            value = """
-                                                    {
-                                                        "message": "이미 찜한 컨텐츠입니다."
-                                                    }
-                                                    """
-                                    )
-                            }
-                    )
-            ),
-            @ApiResponse(
                     responseCode = "404",
                     description = "실패 예시",
                     content = @Content(
@@ -103,6 +84,25 @@ public class FavoriteContentController {
                                             value = """
                                                     {
                                                         "message": "존재하지 않는 컨텐츠입니다."
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "실패 예시",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "already_favorite",
+                                            summary = "이미 찜 한 컨텐츠",
+                                            value = """
+                                                    {
+                                                        "message": "이미 찜한 컨텐츠입니다."
                                                     }
                                                     """
                                     )

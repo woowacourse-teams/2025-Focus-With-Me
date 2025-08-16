@@ -30,8 +30,9 @@ public class FavoriteFolderApiTest {
     void setUp() {
         jdbcTemplate.update("DELETE FROM place_category");
         jdbcTemplate.update("DELETE FROM content_place");
-        jdbcTemplate.update("DELETE FROM place");
         jdbcTemplate.update("DELETE FROM category");
+        jdbcTemplate.update("DELETE FROM favorite_place");
+        jdbcTemplate.update("DELETE FROM place");
         jdbcTemplate.update("DELETE FROM favorite_content");
         jdbcTemplate.update("DELETE FROM favorite_folder");
         jdbcTemplate.update("DELETE FROM member");
@@ -42,6 +43,7 @@ public class FavoriteFolderApiTest {
         jdbcTemplate.update("DELETE FROM province");
 
         jdbcTemplate.update("ALTER TABLE content_place ALTER COLUMN id RESTART WITH 1");
+        jdbcTemplate.update("ALTER TABLE favorite_place ALTER COLUMN id RESTART WITH 1");
         jdbcTemplate.update("ALTER TABLE place ALTER COLUMN id RESTART WITH 1");
         jdbcTemplate.update("ALTER TABLE content ALTER COLUMN id RESTART WITH 1");
         jdbcTemplate.update("ALTER TABLE creator ALTER COLUMN id RESTART WITH 1");
@@ -151,6 +153,72 @@ public class FavoriteFolderApiTest {
                     .body("favoriteFolders[0].memberId", is(1))
                     .body("favoriteFolders[0].name", is("기본 폴더"))
                     .body("favoriteFolders[0].isDefault", is(true));
+        }
+    }
+
+    @DisplayName("/favorites-folders/favorite-status GET 특정 회원의 장소 찜 폴더와 찜 여부 조회 테스트")
+    @Nested
+    class ReadAllWithFavoriteStatusByDeviceId {
+
+        @DisplayName("조회에 성공한 경우 200 OK 코드와 폴더 목록, 찜 여부를 응답한다")
+        @Test
+        void readAllWithFavoriteStatusByDeviceId1() {
+            // given
+            jdbcTemplate.update("INSERT INTO member (device_fid) VALUES ('testDeviceFid')");
+            jdbcTemplate.update(
+                    "INSERT INTO favorite_folder (member_id, name, is_default) VALUES (1, '기본 폴더', true)");
+            jdbcTemplate.update(
+                    "INSERT INTO favorite_folder (member_id, name, is_default) VALUES (1, '맛집 모음', false)");
+            jdbcTemplate.update(
+                    "INSERT INTO place (name, url, address, latitude, longitude) VALUES ('루터회관','https://naver.me/5UrZAIeY', '루터회관의 도로명 주소', 38.1234, 127.23123)");
+            jdbcTemplate.update("INSERT INTO favorite_place (favorite_folder_id, place_id) VALUES (2, 1)");
+
+            // when & then
+            RestAssured.given().port(port)
+                    .header("device-fid", "testDeviceFid")
+                    .queryParam("placeId", 1L)
+                    .when().get("/favorite-folders/favorite-status")
+                    .then()
+                    .statusCode(200)
+                    .body("favoriteFolders.size()", is(2))
+                    .body("favoriteFolders[0].isFavoritePlace", is(false))
+                    .body("favoriteFolders[1].isFavoritePlace", is(true));
+        }
+
+        @DisplayName("저장되지 않은 회원이 조회를 시도하는 경우 200 OK 코드와 기본 폴더 정보를 응답한다")
+        @Test
+        void readAllWithFavoriteStatusByDeviceId2() {
+            // given
+            jdbcTemplate.update(
+                    "INSERT INTO place (name, url, address, latitude, longitude) VALUES ('루터회관','https://naver.me/5UrZAIeY', '루터회관의 도로명 주소', 38.1234, 127.23123)");
+
+            // when & then
+            RestAssured.given().port(port)
+                    .header("device-fid", "newDeviceFid")
+                    .queryParam("placeId", 1L)
+                    .when().get("/favorite-folders/favorite-status")
+                    .then()
+                    .statusCode(200)
+                    .body("favoriteFolders[0].name", is("기본 폴더"))
+                    .body("favoriteFolders[0].isDefault", is(true))
+                    .body("favoriteFolders[0].isFavoritePlace", is(false));
+        }
+
+        @DisplayName("placeId에 대한 장소를 찾을 수 없는 경우 404 NOT FOUND를 응답한다")
+        @Test
+        void readAllWithFavoriteStatusByDeviceId3() {
+            // given
+            jdbcTemplate.update("INSERT INTO member (device_fid) VALUES ('testDeviceFid')");
+            jdbcTemplate.update(
+                    "INSERT INTO favorite_folder (member_id, name, is_default) VALUES (1, '기본 폴더', true)");
+
+            // when & then
+            RestAssured.given().port(port)
+                    .header("device-fid", "testDeviceFid")
+                    .queryParam("placeId", 1L)
+                    .when().get("/favorite-folders/favorite-status")
+                    .then()
+                    .statusCode(404);
         }
     }
 

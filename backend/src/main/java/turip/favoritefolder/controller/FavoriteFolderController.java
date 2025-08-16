@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import turip.exception.ErrorResponse;
 import turip.favoritefolder.controller.dto.request.FavoriteFolderNameRequest;
 import turip.favoritefolder.controller.dto.request.FavoriteFolderRequest;
 import turip.favoritefolder.controller.dto.response.FavoriteFolderResponse;
+import turip.favoritefolder.controller.dto.response.FavoriteFoldersWithFavoriteStatusResponse;
 import turip.favoritefolder.controller.dto.response.FavoriteFoldersWithPlaceCountResponse;
 import turip.favoritefolder.service.FavoriteFolderService;
 
@@ -95,7 +97,7 @@ public class FavoriteFolderController {
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = {
                                     @ExampleObject(
-                                            name = "already_favorite",
+                                            name = "already_exists_folder_name",
                                             summary = "같은 이름의 폴더가 이미 존재하는 경우",
                                             value = """
                                                     {
@@ -136,7 +138,7 @@ public class FavoriteFolderController {
                                                         "id": 5,
                                                         "memberId": 8,
                                                         "name": "기본 폴더",
-                                                        "isDefault": false,
+                                                        "isDefault": true,
                                                         "placeCount": 0
                                                     },
                                                     {
@@ -157,6 +159,69 @@ public class FavoriteFolderController {
     public ResponseEntity<FavoriteFoldersWithPlaceCountResponse> readAllByMember(
             @RequestHeader("device-fid") String deviceFid) {
         FavoriteFoldersWithPlaceCountResponse response = favoriteFolderService.findAllByDeviceFid(deviceFid);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(
+            summary = "장소 찜 폴더 목록과 장소 찜 여부 조회 api",
+            description = "특정 회원의 장소 찜 폴더 목록과, 특정 장소에 대한 찜 여부를 조회한다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "성공 예시",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = FavoriteFoldersWithFavoriteStatusResponse.class),
+                            examples = @ExampleObject(
+                                    name = "success",
+                                    summary = "장소 찜 폴더 조회 성공",
+                                    value = """
+                                            {
+                                                "favoriteFolders": [
+                                                    {
+                                                        "id": 5,
+                                                        "memberId": 1,
+                                                        "name": "기본 폴더",
+                                                        "isDefault": true,
+                                                        "isFavoritePlace": true
+                                                    },
+                                                    {
+                                                        "id": 6,
+                                                        "memberId": 1,
+                                                        "name": "잠실 맛집들",
+                                                        "isDefault": false,
+                                                        "isFavoritePlace": false
+                                                    }
+                                                ]
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "실패 예시",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    name = "success",
+                                    summary = "placeId에 대한 장소가 존재하지 않는 경우",
+                                    value = """
+                                            {
+                                                "message": "해당 id에 대한 장소가 존재하지 않습니다."
+                                            }
+                                            """
+                            )
+                    )
+            )
+    })
+    @GetMapping("/favorite-status")
+    public ResponseEntity<FavoriteFoldersWithFavoriteStatusResponse> readAllWithFavoriteStatusByDeviceId(
+            @RequestHeader("device-fid") String deviceFid, @RequestParam("placeId") Long placeId) {
+        FavoriteFoldersWithFavoriteStatusResponse response = favoriteFolderService.findAllWithFavoriteStatusByDeviceId(
+                deviceFid, placeId);
         return ResponseEntity.ok(response);
     }
 
@@ -309,31 +374,37 @@ public class FavoriteFolderController {
                     description = "성공 예시"
             ),
             @ApiResponse(
+                    responseCode = "400",
+                    description = "실패 예시",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    name = "is_default_folder",
+                                    summary = "삭제하려는 폴더가 기본 폴더인 경우",
+                                    value = """
+                                            {
+                                                "message" : "기본 폴더는 삭제할 수 없습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
                     responseCode = "403",
                     description = "실패 예시",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class),
-                            examples = {
-                                    @ExampleObject(
-                                            name = "is_default_folder",
-                                            summary = "삭제하려는 폴더가 기본 폴더인 경우",
-                                            value = """
-                                                    {
-                                                        "message" : "기본 폴더는 삭제할 수 없습니다."
-                                                    }
-                                                    """
-                                    ),
-                                    @ExampleObject(
-                                            name = "not_folder_owner",
-                                            summary = "폴더 소유자의 기기id와 요청자의 기기id가 같지 않은 경우",
-                                            value = """
-                                                    {
-                                                        "message" : "폴더 소유자의 기기id와 요청자의 기기id가 같지 않습니다."
-                                                    }
-                                                    """
-                                    )
-                            }
+                            examples = @ExampleObject(
+                                    name = "not_folder_owner",
+                                    summary = "폴더 소유자의 기기id와 요청자의 기기id가 같지 않은 경우",
+                                    value = """
+                                            {
+                                                "message" : "폴더 소유자의 기기id와 요청자의 기기id가 같지 않습니다."
+                                            }
+                                            """
+                            )
                     )
             ),
             @ApiResponse(

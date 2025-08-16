@@ -25,6 +25,7 @@ class RegionCategoryApiTest {
 
     @BeforeEach
     void setUp() {
+        jdbcTemplate.update("DELETE FROM favorite_place");
         jdbcTemplate.update("DELETE FROM content_place");
         jdbcTemplate.update("DELETE FROM place_category");
         jdbcTemplate.update("DELETE FROM favorite_content");

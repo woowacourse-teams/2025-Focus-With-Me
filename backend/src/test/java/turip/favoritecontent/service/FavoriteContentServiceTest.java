@@ -24,14 +24,14 @@ import turip.content.domain.Content;
 import turip.content.repository.ContentRepository;
 import turip.contentplace.service.ContentPlaceService;
 import turip.creator.domain.Creator;
-import turip.exception.custom.BadRequestException;
+import turip.exception.custom.ConflictException;
 import turip.exception.custom.NotFoundException;
 import turip.favoritecontent.controller.dto.request.FavoriteContentRequest;
 import turip.favoritecontent.controller.dto.response.FavoriteContentResponse;
 import turip.favoritecontent.domain.FavoriteContent;
 import turip.favoritecontent.repository.FavoriteContentRepository;
 import turip.member.domain.Member;
-import turip.member.repository.MemberRepository;
+import turip.member.service.MemberService;
 
 @ExtendWith(MockitoExtension.class)
 class FavoriteContentServiceTest {
@@ -43,13 +43,13 @@ class FavoriteContentServiceTest {
     private FavoriteContentRepository favoriteContentRepository;
 
     @Mock
-    private MemberRepository memberRepository;
-
-    @Mock
     private ContentRepository contentRepository;
 
     @Mock
     private ContentPlaceService contentPlaceService;
+
+    @Mock
+    private MemberService memberService;
 
     @DisplayName("찜을 생성할 수 있다")
     @Test
@@ -67,8 +67,8 @@ class FavoriteContentServiceTest {
 
         given(contentRepository.findById(contentId))
                 .willReturn(Optional.of(content));
-        given(memberRepository.findByDeviceFid(deviceFid))
-                .willReturn(Optional.of(member));
+        given(memberService.findOrCreateMember(deviceFid))
+                .willReturn(new Member(1L, deviceFid));
         given(favoriteContentRepository.existsByMemberIdAndContentId(any(), eq(contentId)))
                 .willReturn(false);
         given(favoriteContentRepository.save(any(FavoriteContent.class)))
@@ -112,14 +112,14 @@ class FavoriteContentServiceTest {
 
         given(contentRepository.findById(contentId))
                 .willReturn(Optional.of(content));
-        given(memberRepository.findByDeviceFid(deviceFid))
-                .willReturn(Optional.of(member));
+        given(memberService.findOrCreateMember(deviceFid))
+                .willReturn(new Member(1L, deviceFid));
         given(favoriteContentRepository.existsByMemberIdAndContentId(any(), eq(contentId)))
                 .willReturn(true);
 
         // when & then
         assertThatThrownBy(() -> favoriteContentService.create(request, deviceFid))
-                .isInstanceOf(BadRequestException.class);
+                .isInstanceOf(ConflictException.class);
     }
 
     @DisplayName("내 찜 목록을 페이징 조회할 수 있다")
@@ -207,8 +207,8 @@ class FavoriteContentServiceTest {
 
             given(contentRepository.findById(contentId))
                     .willReturn(Optional.of(content));
-            given(memberRepository.findByDeviceFid(deviceFid))
-                    .willReturn(Optional.of(member));
+            given(memberService.getMemberByDeviceId(deviceFid))
+                    .willReturn(member);
             given(favoriteContentRepository.findByMemberIdAndContentId(any(), eq(contentId)))
                     .willReturn(Optional.of(favoriteContent));
 
@@ -246,8 +246,8 @@ class FavoriteContentServiceTest {
 
             given(contentRepository.findById(contentId))
                     .willReturn(Optional.of(content));
-            given(memberRepository.findByDeviceFid(deviceFid))
-                    .willReturn(Optional.empty());
+            given(memberService.getMemberByDeviceId(deviceFid))
+                    .willThrow(NotFoundException.class);
 
             // when & then
             assertThatThrownBy(() -> favoriteContentService.remove(deviceFid, contentId))
@@ -267,8 +267,8 @@ class FavoriteContentServiceTest {
 
             given(contentRepository.findById(contentId))
                     .willReturn(Optional.of(content));
-            given(memberRepository.findByDeviceFid(deviceFid))
-                    .willReturn(Optional.of(member));
+            given(memberService.getMemberByDeviceId(deviceFid))
+                    .willReturn(member);
             given(favoriteContentRepository.findByMemberIdAndContentId(any(), eq(contentId)))
                     .willReturn(Optional.empty());
 

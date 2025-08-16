@@ -72,7 +72,7 @@ public class ContentPlaceController {
                                                         "place": {
                                                             "id": 2,
                                                             "name": "해운대",
-                                                            "url": "https://map.naver.com/p/search/%ED%95%B4%EC%9A%B4%EB%8C%80%20%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5/place/11491806?c=15.00,0,0,0,dh&placePath=/home?entry=bmp&from=map&fromPanelNum=2&timestamp=202507230900&locale=ko&svcName=map_pcv5&searchText=%ED%95%B4%EC%9A%B4%EB%8C%80%20%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5",
+                                                            "url": "https://naver.me/FfeOimOk"
                                                             "address": "부산 해운대구 해운대해변로 264",
                                                             "latitude": 35.160936,
                                                             "longitude": 129.16004,

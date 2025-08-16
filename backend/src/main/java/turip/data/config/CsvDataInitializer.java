@@ -1,4 +1,4 @@
-package turip.csv.config;
+package turip.data.config;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -7,18 +7,20 @@ import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
-import turip.csv.service.CsvDataImportService;
+import turip.data.service.CsvDataImportService;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 @Profile("!test")
+@RequiredArgsConstructor
+@ConditionalOnProperty(name = "spring.profiles.active", havingValue = "dev")
 public class CsvDataInitializer implements CommandLineRunner {
 
     private final CsvDataImportService csvDataImportService;
@@ -55,7 +57,7 @@ public class CsvDataInitializer implements CommandLineRunner {
                 log.info("모든 CSV 파일 import 완료되었습니다.");
             }
 
-            // CSV import 완료 후 data.sql 실행
+            // CSV import 완료 후 favorite_content_data.sql 실행
             executeDataSql();
 
         } catch (Exception e) {
@@ -65,14 +67,14 @@ public class CsvDataInitializer implements CommandLineRunner {
 
     private void executeDataSql() {
         try {
-            log.info("data.sql 실행을 시작합니다.");
+            log.info("favorite_content_data.sql 실행을 시작합니다.");
 
-            // data.sql 파일 읽기
+            // favorite_content_data.sql 파일 읽기
             Resource dataSqlResource = new PathMatchingResourcePatternResolver()
-                    .getResource("classpath:data.sql");
+                    .getResource("classpath:favorite_content_data.sql");
 
             if (!dataSqlResource.exists()) {
-                log.warn("data.sql 파일을 찾을 수 없습니다.");
+                log.warn("favorite_content_data.sql 파일을 찾을 수 없습니다.");
                 return;
             }
 
@@ -97,10 +99,10 @@ public class CsvDataInitializer implements CommandLineRunner {
                 }
             }
 
-            log.info("data.sql 실행이 완료되었습니다.");
+            log.info("favorite_content_data.sql 실행이 완료되었습니다.");
 
         } catch (Exception e) {
-            log.error("data.sql 실행 중 오류 발생: {}", e.getMessage(), e);
+            log.error("favorite_content_data.sql 실행 중 오류 발생: {}", e.getMessage(), e);
         }
     }
 }

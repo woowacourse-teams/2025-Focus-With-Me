@@ -8,5 +8,6 @@ import turip.country.domain.Country;
 public interface CountryRepository extends JpaRepository<Country, Long> {
 
     List<Country> findAllByNameNot(String name);
+
     Optional<Country> findByName(String name);
 }

@@ -13,6 +13,16 @@ spring:
     init:
       mode: never
 
+  # Flyway 설정 - 전용 계정 사용
+  flyway:
+    enabled: true                     # Flyway migration 기능 활성화 여부
+    user: ${FLYWAY_USERNAME}          # Flyway 전용 계정
+    password: ${FLYWAY_PASSWORD}      # Flyway 전용 비밀번호
+    locations: classpath:db/migration # migration 스크립트 위치
+    baseline-on-migrate: true         # 기존 DB에 baseline 버전 생성해서 migration 시작 가능
+    validate-on-migrate: true         # migration 전에 SQL 스크립트와 데이터 일치 여부 검증
+    encoding: UTF-8                   # SQL 파일 인코딩
+
 logging:
   level:
     root: INFO

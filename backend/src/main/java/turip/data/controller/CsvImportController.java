@@ -1,4 +1,4 @@
-package turip.csv.controller;
+package turip.data.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import turip.csv.service.CsvDataImportService;
+import turip.data.service.CsvDataImportService;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/csv")
 @RequiredArgsConstructor
+@RequestMapping("/api/csv")
 public class CsvImportController {
 
     private final CsvDataImportService csvDataImportService;

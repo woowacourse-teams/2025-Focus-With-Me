@@ -10,10 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.test.context.ActiveProfiles;
 import turip.city.domain.City;
 import turip.city.repository.CityRepository;
 import turip.content.domain.Content;
 import turip.content.repository.ContentRepository;
+import turip.country.domain.Country;
+import turip.country.repository.CountryRepository;
 import turip.creator.domain.Creator;
 import turip.creator.repository.CreatorRepository;
 import turip.favoritecontent.domain.FavoriteContent;
@@ -21,6 +24,7 @@ import turip.member.domain.Member;
 import turip.member.repository.MemberRepository;
 
 @DataJpaTest
+@ActiveProfiles("test")
 class FavoriteContentRepositoryTest {
 
     @Autowired
@@ -38,22 +42,30 @@ class FavoriteContentRepositoryTest {
     @Autowired
     private CityRepository cityRepository;
 
+    @Autowired
+    private CountryRepository countryRepository;
 
     @Test
     @DisplayName("컨텐츠를 최신 찜 기준으로 정렬하여 반환한다")
     void findMyFavoriteContentsByDeviceFid() {
         // given
-        Creator creator = creatorRepository.save(new Creator(null, null));
-        City city = cityRepository.save(new City(null, null, null, null));
+        Country country = countryRepository.findByName("대한민국")
+                .orElseGet(() -> countryRepository.save(new Country("대한민국", "https://example.com/korea.jpg")));
 
-        Content content1 = contentRepository.save(new Content(creator, city, null, null, null));
-        Content content2 = contentRepository.save(new Content(creator, city, null, null, null));
+        City city = cityRepository.findByName("서울")
+                .orElseGet(() -> cityRepository.save(new City(country, null, "서울", "https://example.com/seoul.jpg")));
+
+        Creator creator = creatorRepository.save(new Creator("테스트 크리에이터", "https://example.com/profile.jpg"));
+
+        Content content1 = contentRepository.save(
+                new Content(creator, city, "테스트 컨텐츠 1", "https://example.com/content1", LocalDate.now()));
+        Content content2 = contentRepository.save(
+                new Content(creator, city, "테스트 컨텐츠 2", "https://example.com/content2", LocalDate.now()));
 
         Member member = memberRepository.save(new Member("testDeviceFid"));
 
-        FavoriteContent favoriteContent1 = new FavoriteContent(LocalDate.now().minusDays(2), member, content1);
-        FavoriteContent favoriteContent2 = new FavoriteContent(LocalDate.now().minusDays(1), member,
-                content2); // 최신 찜 컨텐츠
+        FavoriteContent favoriteContent1 = new FavoriteContent(member, content1);
+        FavoriteContent favoriteContent2 = new FavoriteContent(member, content2);
 
         favoriteContentRepository.save(favoriteContent1);
         favoriteContentRepository.save(favoriteContent2);

@@ -48,6 +48,14 @@ public class Place {
         this.longitude = longitude;
     }
 
+    public Place(String name, String url, String address, double latitude, double longitude) {
+        this.name = name;
+        this.url = url;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public void addCategory(Category category) {
         PlaceCategory placeCategory = new PlaceCategory(this, category);
         placeCategories.add(placeCategory);

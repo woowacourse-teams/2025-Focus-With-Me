@@ -120,7 +120,7 @@ class FavoriteContentApiTest {
                     "INSERT INTO content_place (content_id, place_id, visit_day, visit_order) VALUES (1, 1, 1, 1)");
             jdbcTemplate.update("INSERT INTO member (device_fid) VALUES ('testDeviceFid')");
             jdbcTemplate.update(
-                    "INSERT INTO favorite_content (member_id, content_id, created_at) VALUES (1, 1, CURRENT_TIMESTAMP)");
+                    "INSERT INTO favorite_content (member_id, content_id) VALUES (1, 1)");
 
             // when & then
             Map<String, String> request = new HashMap<>(Map.of("contentId", "2"));
@@ -151,7 +151,7 @@ class FavoriteContentApiTest {
                     "INSERT INTO content_place (content_id, place_id, visit_day, visit_order) VALUES (1, 1, 1, 1)");
             jdbcTemplate.update("INSERT INTO member (device_fid) VALUES ('testDeviceFid')");
             jdbcTemplate.update(
-                    "INSERT INTO favorite_content (member_id, content_id, created_at) VALUES (1, 1, CURRENT_TIMESTAMP)");
+                    "INSERT INTO favorite_content (member_id, content_id) VALUES (1, 1)");
 
             // when & then
             Map<String, String> request = new HashMap<>(Map.of("contentId", "1"));
@@ -181,7 +181,7 @@ class FavoriteContentApiTest {
                     "INSERT INTO content (creator_id, city_id, url, title, uploaded_date) VALUES (1, 1, 'https://youtube.com/watch?v=deleteTest', '삭제 테스트 영상', '2025-06-01')");
             jdbcTemplate.update("INSERT INTO member (device_fid) VALUES ('testDeviceFid')");
             jdbcTemplate.update(
-                    "INSERT INTO favorite_content (member_id, content_id, created_at) VALUES (1, 1, CURRENT_TIMESTAMP)");
+                    "INSERT INTO favorite_content (member_id, content_id) VALUES (1, 1)");
 
             // when & then
             RestAssured.given().port(port)
@@ -204,7 +204,7 @@ class FavoriteContentApiTest {
                     "INSERT INTO content (creator_id, city_id, url, title, uploaded_date) VALUES (1, 1, 'https://youtube.com/watch?v=deleteTest', '삭제 테스트 영상', '2025-06-01')");
             jdbcTemplate.update("INSERT INTO member (device_fid) VALUES ('testDeviceFid')");
             jdbcTemplate.update(
-                    "INSERT INTO favorite_content (member_id, content_id, created_at) VALUES (1, 1, CURRENT_TIMESTAMP)");
+                    "INSERT INTO favorite_content (member_id, content_id) VALUES (1, 1)");
 
             // when & then
             RestAssured.given().port(port)
@@ -227,7 +227,7 @@ class FavoriteContentApiTest {
                     "INSERT INTO content (creator_id, city_id, url, title, uploaded_date) VALUES (1, 1, 'https://youtube.com/watch?v=deleteTest', '삭제 테스트 영상', '2025-06-01')");
             jdbcTemplate.update("INSERT INTO member (device_fid) VALUES ('testDeviceFid')");
             jdbcTemplate.update(
-                    "INSERT INTO favorite_content (member_id, content_id, created_at) VALUES (1, 1, CURRENT_TIMESTAMP)");
+                    "INSERT INTO favorite_content (member_id, content_id) VALUES (1, 1)");
 
             // when & then
             RestAssured.given().port(port)

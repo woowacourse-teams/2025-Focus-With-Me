@@ -1,12 +1,12 @@
 package turip.favoritecontent.controller.dto.response;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import turip.content.controller.dto.response.ContentResponse;
 import turip.favoritecontent.domain.FavoriteContent;
 
 public record FavoriteContentResponse(
         Long id,
-        LocalDate createdAt,
+        LocalDateTime createdAt,
         Long memberId,
         ContentResponse content
 ) {

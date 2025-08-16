@@ -1,4 +1,4 @@
-package turip.csv.dto;
+package turip.data.dto;
 
 public record CsvDataDto(
         String country,        // 국가

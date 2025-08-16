@@ -7,4 +7,4 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    defer-datasource-initialization: true
+    defer-datasource-initialization: false # 데이터베이스 초기화 지연

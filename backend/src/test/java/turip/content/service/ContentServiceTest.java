@@ -117,8 +117,8 @@ class ContentServiceTest {
             given(memberRepository.findByDeviceFid("testDeviceFid"))
                     .willReturn(Optional.of(member));
             given(favoriteContentRepository.findByMemberIdAndContentIdIn(1L, List.of(1L, 2L)))
-                    .willReturn(List.of(new FavoriteContent(LocalDate.now().minusWeeks(1), member, content1),
-                            new FavoriteContent(LocalDate.now().minusWeeks(1), member, content2)));
+                    .willReturn(List.of(new FavoriteContent(member, content1),
+                            new FavoriteContent(member, content2)));
             given(contentPlaceService.calculateDurationDays(content1.getId()))
                     .willReturn(3); // content1, 2박 3일
             given(contentPlaceService.calculateDurationDays(content2.getId()))

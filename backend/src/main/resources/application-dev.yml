@@ -10,12 +10,15 @@ spring:
     init:
       mode: always
       data-locations:
-        - classpath:Region/region_data.sql
-        - classpath:Creator/creator_data.sql
+        - classpath:region_data.sql
+        - classpath:creator_data.sql
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
+
+  flyway:
+    enabled: true
 
 logging:
   level:

@@ -80,7 +80,7 @@ VALUES ('전주', 1, 4, 'https://drive.google.com/uc?export=view&id=1B6vyjYUsH7V
 
 -- 대한민국 - 경상
 INSERT INTO city (name, country_id, province_id, image_url)
-VALUES ('포항', 1, 5, null),
+VALUES ('포항', 1, 5, ''),
        ('경주', 1, 5, 'https://drive.google.com/uc?export=view&id=1gwJkaUj1btIzsUeMdanMClhkgN9AJ0LJ'),
        ('구미', 1, 5, ''),
        ('안동', 1, 5, ''),
@@ -97,41 +97,41 @@ VALUES ('제주', 1, 6, 'https://drive.google.com/uc?export=view&id=14Z74DP4OwiO
 
 -- 일본
 INSERT INTO city (name, country_id, province_id, image_url)
-VALUES ('도쿄', 2, null, null),
-       ('후쿠오카', 2, null, null),
-       ('교토', 2, null, null),
-       ('오사카', 2, null, null),
-       ('나고야', 2, null, null),
-       ('삿포로', 2, null, null),
-       ('나라', 2, null, null),
-       ('가나자와', 2, null, null),
-       ('하코네', 2, null, null),
-       ('오키나와', 2, null, null);
+VALUES ('도쿄', 2, null, ''),
+       ('후쿠오카', 2, null, ''),
+       ('교토', 2, null, ''),
+       ('오사카', 2, null, ''),
+       ('나고야', 2, null, ''),
+       ('삿포로', 2, null, ''),
+       ('나라', 2, null, ''),
+       ('가나자와', 2, null, ''),
+       ('하코네', 2, null, ''),
+       ('오키나와', 2, null, '');
 
 -- 대만
 INSERT INTO city (name, country_id, province_id, image_url)
-VALUES ('타이페이', 3, null, null),
-       ('신베이시', 3, null, null),
-       ('타이중', 3, null, null),
-       ('가오슝', 3, null, null),
-       ('타이난', 3, null, null);
+VALUES ('타이페이', 3, null, ''),
+       ('신베이시', 3, null, ''),
+       ('타이중', 3, null, ''),
+       ('가오슝', 3, null, ''),
+       ('타이난', 3, null, '');
 
 -- 중국
 INSERT INTO city (name, country_id, province_id, image_url)
-VALUES ('베이징', 4, null, null),
-       ('상하이', 4, null, null),
-       ('광저우', 4, null, null),
-       ('선전', 4, null, null),
-       ('청두', 4, null, null),
-       ('시안', 4, null, null),
-       ('충칭', 4, null, null),
-       ('항저우', 4, null, null),
-       ('난징', 4, null, null),
-       ('톈진', 4, null, null),
-       ('우한', 4, null, null),
-       ('리장', 4, null, null),
-       ('장자제', 4, null, null),
-       ('하얼빈', 4, null, null),
-       ('구이린', 4, null, null),
-       ('쿤밍', 4, null, null),
-       ('다리', 4, null, null);
+VALUES ('베이징', 4, null, ''),
+       ('상하이', 4, null, ''),
+       ('광저우', 4, null, ''),
+       ('선전', 4, null, ''),
+       ('청두', 4, null, ''),
+       ('시안', 4, null, ''),
+       ('충칭', 4, null, ''),
+       ('항저우', 4, null, ''),
+       ('난징', 4, null, ''),
+       ('톈진', 4, null, ''),
+       ('우한', 4, null, ''),
+       ('리장', 4, null, ''),
+       ('장자제', 4, null, ''),
+       ('하얼빈', 4, null, ''),
+       ('구이린', 4, null, ''),
+       ('쿤밍', 4, null, ''),
+       ('다리', 4, null, '');

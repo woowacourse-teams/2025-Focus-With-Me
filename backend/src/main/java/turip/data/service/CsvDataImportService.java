@@ -1,4 +1,4 @@
-package turip.csv.service;
+package turip.data.service;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -22,7 +22,7 @@ import turip.country.domain.Country;
 import turip.country.repository.CountryRepository;
 import turip.creator.domain.Creator;
 import turip.creator.repository.CreatorRepository;
-import turip.csv.dto.CsvDataDto;
+import turip.data.dto.CsvDataDto;
 import turip.place.domain.Place;
 import turip.place.repository.PlaceRepository;
 import turip.placecategory.domain.PlaceCategory;
@@ -32,8 +32,8 @@ import turip.province.repository.ProvinceRepository;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class CsvDataImportService {
 
     private static final String QUOTATION_MARKS = "\"";
@@ -154,7 +154,7 @@ public class CsvDataImportService {
             return null;
         }
         return countryRepository.findByName(countryName)
-                .orElseGet(() -> countryRepository.save(new Country(countryName, null)));
+                .orElseGet(() -> countryRepository.save(new Country(countryName, "")));
     }
 
     private Province findOrCreateProvince(String provinceName) {
@@ -170,7 +170,7 @@ public class CsvDataImportService {
             return null;
         }
         return cityRepository.findByName(cityName)
-                .orElseGet(() -> cityRepository.save(new City(country, province, cityName, null)));
+                .orElseGet(() -> cityRepository.save(new City(country, province, cityName, "")));
     }
 
     private Creator findOrCreateCreator(String channelName) {
@@ -178,7 +178,7 @@ public class CsvDataImportService {
             return null;
         }
         return creatorRepository.findByChannelName(channelName)
-                .orElseGet(() -> creatorRepository.save(new Creator(channelName, null)));
+                .orElseGet(() -> creatorRepository.save(new Creator(channelName, "")));
     }
 
     private Content findOrCreateContent(Creator creator, City city, CsvDataDto csvData) {
@@ -212,11 +212,11 @@ public class CsvDataImportService {
     }
 
     private Place findOrCreatePlace(CsvDataDto csvData) {
-        String placeName = csvData.placeName();
-        if (isNullOrEmpty(placeName)) {
+        String placeUrl = csvData.mapUrl();
+        if (isNullOrEmpty(placeUrl)) {
             return null;
         }
-        return placeRepository.findByName(placeName)
+        return placeRepository.findByUrl(placeUrl)
                 .orElseGet(() -> createAndSavePlace(csvData));
     }
 

@@ -1,20 +1,20 @@
-package com.on.turip.data.trip
+package com.on.turip.data.content.place
 
-import com.on.turip.data.trip.dto.CategoryResponse
-import com.on.turip.data.trip.dto.PlaceResponse
-import com.on.turip.data.trip.dto.TripCourseResponse
-import com.on.turip.data.trip.dto.TripDurationResponse
-import com.on.turip.data.trip.dto.TripResponse
+import com.on.turip.data.content.place.dto.CategoryResponse
+import com.on.turip.data.content.place.dto.PlaceResponse
+import com.on.turip.data.content.place.dto.TripCourseResponse
+import com.on.turip.data.content.place.dto.TripDurationResponse
+import com.on.turip.data.content.place.dto.TripResponse
+import com.on.turip.domain.trip.ContentPlace
 import com.on.turip.domain.trip.Place
 import com.on.turip.domain.trip.Trip
-import com.on.turip.domain.trip.TripCourse
 import com.on.turip.domain.trip.TripDuration
 
 fun TripResponse.toDomain(): Trip =
     Trip(
         tripDuration = tripDuration.toDomain(),
-        tripPlaceCount = tripPlaceCount,
-        tripCourses = tripCourses.map(TripCourseResponse::toDomain),
+        tripPlaceCount = contentPlaceCount,
+        contentPlaces = tripCourses.map(TripCourseResponse::toDomain),
     )
 
 fun TripDurationResponse.toDomain(): TripDuration =
@@ -23,12 +23,13 @@ fun TripDurationResponse.toDomain(): TripDuration =
         days = days,
     )
 
-fun TripCourseResponse.toDomain(): TripCourse =
-    TripCourse(
+fun TripCourseResponse.toDomain(): ContentPlace =
+    ContentPlace(
         tripCourseId = id,
         visitDay = visitDay,
         visitOrder = visitOrder,
         place = place.toDomain(),
+        timeLine = timeLine,
     )
 
 fun PlaceResponse.toDomain(): Place =

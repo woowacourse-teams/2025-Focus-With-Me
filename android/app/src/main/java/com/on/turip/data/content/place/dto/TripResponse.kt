@@ -1,14 +1,14 @@
-package com.on.turip.data.trip.dto
+package com.on.turip.data.content.place.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class TripResponse(
-    @SerialName("tripCourses")
+    @SerialName("contentPlaces")
     val tripCourses: List<TripCourseResponse>,
     @SerialName("tripDuration")
     val tripDuration: TripDurationResponse,
-    @SerialName("tripPlaceCount")
-    val tripPlaceCount: Int,
+    @SerialName("contentPlaceCount")
+    val contentPlaceCount: Int,
 )

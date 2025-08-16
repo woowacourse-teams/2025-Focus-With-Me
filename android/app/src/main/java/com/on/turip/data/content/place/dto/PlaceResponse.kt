@@ -1,4 +1,4 @@
-package com.on.turip.data.trip.dto
+package com.on.turip.data.content.place.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

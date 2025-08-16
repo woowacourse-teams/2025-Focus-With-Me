@@ -17,9 +17,9 @@ import com.on.turip.domain.content.repository.ContentRepository
 import com.on.turip.domain.creator.Creator
 import com.on.turip.domain.creator.repository.CreatorRepository
 import com.on.turip.domain.favorite.usecase.UpdateFavoriteUseCase
+import com.on.turip.domain.trip.ContentPlace
 import com.on.turip.domain.trip.Trip
-import com.on.turip.domain.trip.TripCourse
-import com.on.turip.domain.trip.repository.TripRepository
+import com.on.turip.domain.trip.repository.ContentPlaceRepository
 import com.on.turip.ui.common.mapper.toUiModel
 import com.on.turip.ui.common.model.trip.TripModel
 import kotlinx.coroutines.Deferred
@@ -36,7 +36,7 @@ class TripDetailViewModel(
     private val creatorId: Long,
     private val contentRepository: ContentRepository,
     private val creatorRepository: CreatorRepository,
-    private val tripRepository: TripRepository,
+    private val contentPlaceRepository: ContentPlaceRepository,
     private val updateFavoriteUseCase: UpdateFavoriteUseCase,
 ) : ViewModel() {
     private val _content: MutableLiveData<Content> = MutableLiveData()
@@ -101,7 +101,7 @@ class TripDetailViewModel(
 
     private fun loadTrip() {
         viewModelScope.launch {
-            tripRepository
+            contentPlaceRepository
                 .loadTripInfo(contentId)
                 .onSuccess { trip: Trip ->
                     setupCached(trip)
@@ -126,7 +126,7 @@ class TripDetailViewModel(
         placeCacheByDay =
             dayModels.associate { dayModel ->
                 val day: Int = dayModel.day
-                val coursesForDay: List<TripCourse> = trip.tripCourses.filter { it.visitDay == day }
+                val coursesForDay: List<ContentPlace> = trip.contentPlaces.filter { it.visitDay == day }
                 val placeModels: List<PlaceModel> =
                     coursesForDay.map { course ->
                         PlaceModel(
@@ -197,7 +197,7 @@ class TripDetailViewModel(
             creatorId: Long,
             contentRepository: ContentRepository = RepositoryModule.contentRepository,
             creatorRepository: CreatorRepository = RepositoryModule.creatorRepository,
-            travelRepository: TripRepository = RepositoryModule.tripRepository,
+            travelRepository: ContentPlaceRepository = RepositoryModule.contentPlaceRepository,
             updateFavoriteUseCase: UpdateFavoriteUseCase = UpdateFavoriteUseCase(RepositoryModule.favoriteRepository),
         ): ViewModelProvider.Factory =
             viewModelFactory {

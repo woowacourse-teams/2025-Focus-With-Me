@@ -2,6 +2,8 @@ package com.on.turip.di
 
 import com.on.turip.data.content.datasource.ContentRemoteDataSource
 import com.on.turip.data.content.datasource.DefaultContentRemoteDataSource
+import com.on.turip.data.content.place.datasource.ContentPlaceRemoteDataSource
+import com.on.turip.data.content.place.datasource.DefaultCotentPlaceRemoteDataSource
 import com.on.turip.data.creator.datasource.CreatorRemoteDataSource
 import com.on.turip.data.creator.datasource.DefaultCreatorRemoteDataSource
 import com.on.turip.data.favorite.datasource.DefaultFavoriteRemoteDataSource
@@ -10,8 +12,6 @@ import com.on.turip.data.region.datasource.DefaultRegionRemoteDataSource
 import com.on.turip.data.region.datasource.RegionRemoteDataSource
 import com.on.turip.data.searchhistory.datasource.DefaultSearchHistoryDataSource
 import com.on.turip.data.searchhistory.datasource.SearchHistoryDataSource
-import com.on.turip.data.trip.datasource.DefaultTripRemoteDataSource
-import com.on.turip.data.trip.datasource.TripRemoteDataSource
 import com.on.turip.data.userstorage.datasource.DefaultUserStorageLocalDataSource
 import com.on.turip.data.userstorage.datasource.UserStorageLocalDataSource
 
@@ -22,8 +22,8 @@ object DataSourceModule {
     val creatorRemoteDataSource: CreatorRemoteDataSource by lazy {
         DefaultCreatorRemoteDataSource(NetworkModule.creatorService)
     }
-    val tripRemoteDataSource: TripRemoteDataSource by lazy {
-        DefaultTripRemoteDataSource(NetworkModule.tripService)
+    val contentPlaceRemoteDataSource: ContentPlaceRemoteDataSource by lazy {
+        DefaultCotentPlaceRemoteDataSource(NetworkModule.contentPlaceService)
     }
     val userStorageLocalDataSource: UserStorageLocalDataSource by lazy {
         DefaultUserStorageLocalDataSource(LocalStorageModule.userStorage)

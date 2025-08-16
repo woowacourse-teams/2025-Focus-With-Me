@@ -29,7 +29,7 @@ import turip.favoritefolder.domain.FavoriteFolder;
 import turip.favoritefolder.repository.FavoriteFolderRepository;
 import turip.favoriteplace.repository.FavoritePlaceRepository;
 import turip.member.domain.Member;
-import turip.member.repository.MemberRepository;
+import turip.member.service.MemberService;
 
 @ExtendWith(MockitoExtension.class)
 class FavoriteFolderServiceTest {
@@ -41,7 +41,7 @@ class FavoriteFolderServiceTest {
     private FavoriteFolderRepository favoriteFolderRepository;
 
     @Mock
-    private MemberRepository memberRepository;
+    private MemberService memberService;
 
     @Mock
     private FavoritePlaceRepository favoritePlaceRepository;
@@ -63,8 +63,8 @@ class FavoriteFolderServiceTest {
             FavoriteFolderRequest request = new FavoriteFolderRequest(folderName);
             Member member = new Member(memberId, null);
 
-            given(memberRepository.findByDeviceFid(deviceFid))
-                    .willReturn(Optional.of(member));
+            given(memberService.findOrCreateMember(deviceFid))
+                    .willReturn(member);
             given(favoriteFolderRepository.existsByNameAndMember(folderName, member))
                     .willReturn(false);
             given(favoriteFolderRepository.save(FavoriteFolder.customFolderOf(member, folderName)))
@@ -94,8 +94,8 @@ class FavoriteFolderServiceTest {
             FavoriteFolderRequest request = new FavoriteFolderRequest(folderName);
             Member member = new Member(memberId, null);
 
-            given(memberRepository.findByDeviceFid(deviceFid))
-                    .willReturn(Optional.of(member));
+            given(memberService.findOrCreateMember(deviceFid))
+                    .willReturn(member);
             given(favoriteFolderRepository.existsByNameAndMember(folderName, member))
                     .willReturn(true);
 
@@ -115,8 +115,8 @@ class FavoriteFolderServiceTest {
             FavoriteFolderRequest request = new FavoriteFolderRequest(folderName);
             Member member = new Member(memberId, null);
 
-            given(memberRepository.findByDeviceFid(deviceFid))
-                    .willReturn(Optional.of(member));
+            given(memberService.findOrCreateMember(deviceFid))
+                    .willReturn(member);
 
             // when & then
             assertThatThrownBy(() -> favoriteFolderService.createCustomFavoriteFolder(request, deviceFid))
@@ -135,7 +135,7 @@ class FavoriteFolderServiceTest {
             String deviceFid = "testDeviceFid";
             Member member = new Member(deviceFid);
             Member savedMember = new Member(1L, member.getDeviceFid());
-            given(memberRepository.save(member))
+            given(memberService.findOrCreateMember(deviceFid))
                     .willReturn(savedMember);
 
             FavoriteFolder defaultFolder = new FavoriteFolder(1L, savedMember, "기본 폴더", true);
@@ -162,28 +162,6 @@ class FavoriteFolderServiceTest {
                     () -> assertThat(response.favoriteFolders().get(1).name()).isEqualTo("커스텀 폴더 1")
             );
         }
-
-        @DisplayName("기기 id에 대한 회원이 존재하지 않는 경우, 회원을 생성하고 기본 폴더를 추가한다")
-        @Test
-        void findAllByDeviceFid2() {
-            // given
-            String deviceFid = "testDeviceFid";
-            Member member = new Member(deviceFid);
-            Member savedMember = new Member(1L, member.getDeviceFid());
-            given(memberRepository.findByDeviceFid(deviceFid))
-                    .willReturn(Optional.empty());
-            given(memberRepository.save(member))
-                    .willReturn(savedMember);
-            given(favoriteFolderRepository.findAllByMember(savedMember))
-                    .willReturn(List.of());
-
-            // when
-            favoriteFolderService.findAllByDeviceFid(deviceFid);
-
-            // then
-            FavoriteFolder defaultFolder = FavoriteFolder.defaultFolderOf(savedMember);
-            verify(favoriteFolderRepository).save(defaultFolder);
-        }
     }
 
     @DisplayName("장소 찜 폴더 이름 변경 테스트")
@@ -205,8 +183,8 @@ class FavoriteFolderServiceTest {
             FavoriteFolder favoriteFolder = new FavoriteFolder(folderId, member, oldName, isDefault);
             FavoriteFolderNameRequest request = new FavoriteFolderNameRequest(newName);
 
-            given(memberRepository.findByDeviceFid(deviceFid))
-                    .willReturn(Optional.of(member));
+            given(memberService.getMemberByDeviceId(deviceFid))
+                    .willReturn(member);
             given(favoriteFolderRepository.findById(folderId))
                     .willReturn(Optional.of(favoriteFolder));
 
@@ -232,13 +210,12 @@ class FavoriteFolderServiceTest {
 
             FavoriteFolderNameRequest request = new FavoriteFolderNameRequest(newName);
 
-            given(memberRepository.findByDeviceFid(deviceFid))
-                    .willReturn(Optional.empty());
+            given(memberService.getMemberByDeviceId(deviceFid))
+                    .willThrow(new NotFoundException("해당 id에 대한 회원이 존재하지 않습니다"));
 
             // when & then
             assertThatThrownBy(() -> favoriteFolderService.updateName(deviceFid, folderId, request))
-                    .isInstanceOf(NotFoundException.class)
-                    .hasMessageContaining("해당 id에 대한 회원이 존재하지 않습니다");
+                    .isInstanceOf(NotFoundException.class);
         }
 
         @DisplayName("favoriteFolderId에 대한 회원이 존재하지 않는 경우 NotFoundException을 발생시킨다")
@@ -253,8 +230,8 @@ class FavoriteFolderServiceTest {
             Member member = new Member(memberId, deviceFid);
             FavoriteFolderNameRequest request = new FavoriteFolderNameRequest(newName);
 
-            given(memberRepository.findByDeviceFid(deviceFid))
-                    .willReturn(Optional.of(member));
+            given(memberService.getMemberByDeviceId(deviceFid))
+                    .willReturn(member);
             given(favoriteFolderRepository.findById(nonExistentFolderId))
                     .willReturn(Optional.empty());
 
@@ -282,8 +259,8 @@ class FavoriteFolderServiceTest {
             FavoriteFolder favoriteFolder = new FavoriteFolder(folderId, ownerMember, oldName, isDefault);
             FavoriteFolderNameRequest request = new FavoriteFolderNameRequest(newName);
 
-            given(memberRepository.findByDeviceFid(requestDeviceFid))
-                    .willReturn(Optional.of(requestMember));
+            given(memberService.getMemberByDeviceId(requestDeviceFid))
+                    .willReturn(requestMember);
             given(favoriteFolderRepository.findById(folderId))
                     .willReturn(Optional.of(favoriteFolder));
 
@@ -307,8 +284,8 @@ class FavoriteFolderServiceTest {
             FavoriteFolder favoriteFolder = new FavoriteFolder(folderId, member, oldName, isDefault);
             FavoriteFolderNameRequest request = new FavoriteFolderNameRequest(newName);
 
-            given(memberRepository.findByDeviceFid(deviceFid))
-                    .willReturn(Optional.of(member));
+            given(memberService.getMemberByDeviceId(deviceFid))
+                    .willReturn(member);
             given(favoriteFolderRepository.findById(folderId))
                     .willReturn(Optional.of(favoriteFolder));
             given(favoriteFolderRepository.existsByNameAndMember(newName, member))
@@ -334,8 +311,8 @@ class FavoriteFolderServiceTest {
             FavoriteFolder favoriteFolder = new FavoriteFolder(folderId, member, oldName, isDefault);
             FavoriteFolderNameRequest request = new FavoriteFolderNameRequest(newName);
 
-            given(memberRepository.findByDeviceFid(deviceFid))
-                    .willReturn(Optional.of(member));
+            given(memberService.getMemberByDeviceId(deviceFid))
+                    .willReturn(member);
             given(favoriteFolderRepository.findById(folderId))
                     .willReturn(Optional.of(favoriteFolder));
 
@@ -359,8 +336,8 @@ class FavoriteFolderServiceTest {
             FavoriteFolder favoriteFolder = new FavoriteFolder(folderId, member, oldName, isDefault);
             FavoriteFolderNameRequest request = new FavoriteFolderNameRequest(newName);
 
-            given(memberRepository.findByDeviceFid(deviceFid))
-                    .willReturn(Optional.of(member));
+            given(memberService.getMemberByDeviceId(deviceFid))
+                    .willReturn(member);
             given(favoriteFolderRepository.findById(folderId))
                     .willReturn(Optional.of(favoriteFolder));
 
@@ -388,8 +365,8 @@ class FavoriteFolderServiceTest {
             Member member = new Member(memberId, deviceFid);
             FavoriteFolder favoriteFolder = new FavoriteFolder(folderId, member, folderName, isDefault);
 
-            given(memberRepository.findByDeviceFid(deviceFid))
-                    .willReturn(Optional.of(member));
+            given(memberService.getMemberByDeviceId(deviceFid))
+                    .willReturn(member);
             given(favoriteFolderRepository.findById(folderId))
                     .willReturn(Optional.of(favoriteFolder));
 
@@ -407,13 +384,12 @@ class FavoriteFolderServiceTest {
             String deviceFid = "nonExistentDeviceFid";
             Long folderId = 1L;
 
-            given(memberRepository.findByDeviceFid(deviceFid))
-                    .willReturn(Optional.empty());
+            given(memberService.getMemberByDeviceId(deviceFid))
+                    .willThrow(new NotFoundException("해당 id에 대한 회원이 존재하지 않습니다"));
 
             // when & then
             assertThatThrownBy(() -> favoriteFolderService.remove(deviceFid, folderId))
-                    .isInstanceOf(NotFoundException.class)
-                    .hasMessageContaining("해당 id에 대한 회원이 존재하지 않습니다");
+                    .isInstanceOf(NotFoundException.class);
         }
 
         @DisplayName("favoriteFolderId에 대한 회원이 존재하지 않는 경우 NotFoundException을 발생시킨다")
@@ -426,8 +402,8 @@ class FavoriteFolderServiceTest {
 
             Member member = new Member(memberId, deviceFid);
 
-            given(memberRepository.findByDeviceFid(deviceFid))
-                    .willReturn(Optional.of(member));
+            given(memberService.getMemberByDeviceId(deviceFid))
+                    .willReturn(member);
             given(favoriteFolderRepository.findById(nonExistentFolderId))
                     .willReturn(Optional.empty());
 
@@ -453,8 +429,8 @@ class FavoriteFolderServiceTest {
             Member ownerMember = new Member(ownerMemberId, ownerDeviceFid);
             FavoriteFolder favoriteFolder = new FavoriteFolder(folderId, ownerMember, folderName, isDefault);
 
-            given(memberRepository.findByDeviceFid(requestDeviceFid))
-                    .willReturn(Optional.of(requestMember));
+            given(memberService.getMemberByDeviceId(requestDeviceFid))
+                    .willReturn(requestMember);
             given(favoriteFolderRepository.findById(folderId))
                     .willReturn(Optional.of(favoriteFolder));
 
@@ -476,8 +452,8 @@ class FavoriteFolderServiceTest {
             Member member = new Member(memberId, deviceFid);
             FavoriteFolder favoriteFolder = new FavoriteFolder(folderId, member, folderName, isDefault);
 
-            given(memberRepository.findByDeviceFid(deviceFid))
-                    .willReturn(Optional.of(member));
+            given(memberService.getMemberByDeviceId(deviceFid))
+                    .willReturn(member);
             given(favoriteFolderRepository.findById(folderId))
                     .willReturn(Optional.of(favoriteFolder));
 

@@ -49,6 +49,8 @@
     <string name="trip_detail_snackbar_favorite_save">컨텐츠 찜 목록에 저장했어요</string>
     <string name="trip_detail_snackbar_favorite_remove">컨텐츠 찜 목록에서 삭제했어요</string>
 
+    <!-- 폴더 페이지 -->
+    <string name="folder_title">폴더 편집</string>
 
     <string name="main_double_back_pressed_to_exit">한 번 더 누르면 종료됩니다.</string>
 

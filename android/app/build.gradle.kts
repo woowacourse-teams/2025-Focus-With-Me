@@ -112,4 +112,6 @@ dependencies {
     kapt(libs.androidx.room.compiler)
     // viewpager2
     implementation(libs.androidx.viewpager2)
+    // livedata
+    implementation(libs.androidx.lifecycle.livedata.ktx)
 }

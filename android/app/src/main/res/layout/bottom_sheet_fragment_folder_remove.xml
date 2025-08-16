@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="30dp">
+
+    <TextView
+        android:id="@+id/tv_bottom_sheet_folder_remove_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/title2"
+        android:textColor="@color/pure_black_151515"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="'폴더명'을 삭제하시겠습니까?" />
+
+    <TextView
+        android:id="@+id/tv_bottom_sheet_folder_remove_place_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textAppearance="@style/body2"
+        android:textColor="@color/gray_300_5b5b5b"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_bottom_sheet_folder_remove_title"
+        tools:text="장소 10개" />
+
+    <TextView
+        android:id="@+id/tv_bottom_sheet_folder_remove_cancel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_stroke_gray400_radius_40dp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:paddingVertical="16dp"
+        android:text="@string/bottom_sheet_folder_remove_cancel"
+        android:textAlignment="center"
+        android:textAppearance="@style/title3"
+        android:textColor="@color/pure_black_151515"
+        app:layout_constraintEnd_toStartOf="@id/tv_bottom_sheet_folder_remove_remove"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_bottom_sheet_folder_remove_place_count"
+        tools:text="취소" />
+
+    <TextView
+        android:id="@+id/tv_bottom_sheet_folder_remove_remove"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/bg_gray400_radius_40dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:paddingVertical="16dp"
+        android:text="@string/bottom_sheet_folder_remove_remove"
+        android:textAlignment="center"
+        android:textAppearance="@style/title3"
+        android:textColor="@color/pure_white_ffffff"
+        app:layout_constraintBottom_toBottomOf="@id/tv_bottom_sheet_folder_remove_cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_bottom_sheet_folder_remove_cancel"
+        app:layout_constraintTop_toTopOf="@id/tv_bottom_sheet_folder_remove_cancel"
+        tools:text="삭제" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,14 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.main.favorite.FavoritePlaceFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="장소 찜" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_favorite_place_folder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:minHeight="42dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toStartOf="@id/iv_favorite_place_folder"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/item_place_folder" />
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/iv_favorite_place_folder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/bg_gray300_radius_10dp"
+        android:contentDescription="@null"
+        android:padding="10dp"
+        android:src="@drawable/ic_folder"
+        app:layout_constraintBottom_toBottomOf="@id/rv_favorite_place_folder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/rv_favorite_place_folder"
+        app:layout_constraintTop_toTopOf="@id/rv_favorite_place_folder" />
+
+    <TextView
+        android:id="@+id/tv_favorite_place_place_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:textAppearance="@style/info1"
+        android:textColor="@color/gray_300_5b5b5b"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rv_favorite_place_folder"
+        tools:text="장소 10개" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_favorite_place_place"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_favorite_place_place_count"
+        tools:listitem="@layout/item_favorite_place" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_favorite_place_not_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="tv_favorite_place_place_count,rv_favorite_place_place" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_favorite_place_empty"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rv_favorite_place_folder">
+
+        <ImageView
+            android:id="@+id/iv_favorite_place_empty_heart"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_heart_empty"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.34" />
+
+        <TextView
+            android:id="@+id/tv_favorite_place_empty_suggest_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/favorite_place_empty_suggest_title"
+            android:textAppearance="@style/title1"
+            android:textColor="@color/pure_black_151515"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_favorite_place_empty_heart" />
+
+        <TextView
+            android:id="@+id/tv_favorite_place_empty_suggest_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/favorite_place_empty_suggest_description"
+            android:textAlignment="center"
+            android:textAppearance="@style/title1"
+            android:textColor="@color/gray_200_c1c1c1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_favorite_place_empty_suggest_title" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

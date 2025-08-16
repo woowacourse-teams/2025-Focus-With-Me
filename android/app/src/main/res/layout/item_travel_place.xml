@@ -52,10 +52,4 @@
         app:layout_constraintTop_toTopOf="@id/tv_travel_place_name"
         app:tint="@color/turip_lemon_faff60" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="23dp"
-        app:layout_constraintStart_toStartOf="@id/tv_travel_place_category"
-        app:layout_constraintTop_toBottomOf="@id/tv_travel_place_category" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

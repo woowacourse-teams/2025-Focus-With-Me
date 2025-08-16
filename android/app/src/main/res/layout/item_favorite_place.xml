@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginBottom="18dp"
+    android:background="@drawable/bg_stroke_gray200_radius_24dp"
+    android:backgroundTint="@color/gray_300_5b5b5b"
+    android:paddingTop="24dp"
+    android:paddingBottom="6dp">
+
+    <TextView
+        android:id="@+id/tv_favorite_place_category"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="28dp"
+        android:textAppearance="@style/title3"
+        android:textColor="@color/pure_white_ffffff"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="관광지" />
+
+    <TextView
+        android:id="@+id/tv_favorite_place_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="20dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAppearance="@style/title1"
+        android:textColor="@color/pure_white_ffffff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tv_favorite_place_category"
+        app:layout_constraintTop_toBottomOf="@id/tv_favorite_place_category"
+        tools:text="경포대 해수욕장경포대 해수욕장경포대 해수욕장경포대 해수욕장" />
+
+    <ImageView
+        android:id="@+id/iv_favorite_place_map_link"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:contentDescription="@null"
+        android:padding="16dp"
+        android:src="@drawable/btn_map_link"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@id/md_favorite_place_icon_divider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_favorite_place_name"
+        app:tint="@color/turip_lemon_faff60" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/md_favorite_place_icon_divider"
+        android:layout_width="1dp"
+        android:layout_height="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/iv_favorite_place_map_link"
+        app:layout_constraintEnd_toStartOf="@id/iv_favorite_place_favorite"
+        app:layout_constraintStart_toEndOf="@id/iv_favorite_place_map_link"
+        app:layout_constraintTop_toTopOf="@id/iv_favorite_place_map_link" />
+
+    <ImageView
+        android:id="@+id/iv_favorite_place_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:contentDescription="@null"
+        android:padding="16dp"
+        android:src="@drawable/btn_favorite_lemon"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/md_favorite_place_icon_divider"
+        app:layout_constraintTop_toBottomOf="@id/tv_favorite_place_name"
+        app:tint="@color/turip_lemon_faff60" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

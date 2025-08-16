@@ -39,6 +39,10 @@
     <string name="favorite_content_empty_suggest_title">컨텐츠를 찜 해보세요!</string>
     <string name="favorite_content_empty_suggest_description">원하는 동선이 담긴\n여행 일정을 저장해 보세요.</string>
 
+    <!-- 찜 장소 목록 페이지 -->
+    <string name="favorite_place_empty_suggest_title">장소를 찜 해보세요!</string>
+    <string name="favorite_place_empty_suggest_description">장소에 하트를 눌러\n마음에 드는 장소 목록을 만들어 보세요.</string>
+
     <!-- 스플래시 페이지 -->
     <string name="splash_description">직진만 남은 여행</string>
 

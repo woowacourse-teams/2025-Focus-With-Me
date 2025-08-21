@@ -30,10 +30,10 @@ jobs:
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}    
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
-        
+
     - name: set up JDK 17
       uses: actions/setup-java@v4
       with:
@@ -45,21 +45,23 @@ jobs:
       run: chmod +x ./gradlew
 
     - name: Create local.properties
-      run: echo "base_url=${{ secrets.BASE_URL }}" > local.properties  
+      run: |
+        echo "debug_base_url=${{ secrets.DEBUG_BASE_URL }}" > ./local.properties
+        echo "release_base_url=${{ secrets.RELEASE_BASE_URL }}" >> ./local.properties
 
     - name: Write google-services.json for debug
       run: |
         mkdir -p ./app/src/debug
         echo '${{ secrets.GOOGLE_SERVICES_JSON_DEBUG }}' > ./app/src/debug/google-services.json
-    
+
     - name: Write google-services.json for release
       run: |
         mkdir -p ./app
         echo '${{ secrets.GOOGLE_SERVICES_JSON_RELEASE }}' > ./app/google-services.json
-      
+
     - name: Build with Gradle
       run: ./gradlew build --stacktrace
-      
+
   lint:
     name: Ktlint Check
     runs-on: ubuntu-latest
@@ -75,7 +77,7 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: set up JDK 17
       uses: actions/setup-java@v4
       with:
@@ -120,17 +122,17 @@ jobs:
 
     - name: Create local.properties
       run: echo "base_url=${{ secrets.BASE_URL }}" > local.properties
-    
+
     - name: Write google-services.json for debug
       run: |
         mkdir -p ./app/src/debug
         echo '${{ secrets.GOOGLE_SERVICES_JSON_DEBUG }}' > ./app/src/debug/google-services.json
-    
+
     - name: Write google-services.json for release
       run: |
         mkdir -p ./app
         echo '${{ secrets.GOOGLE_SERVICES_JSON_RELEASE }}' > ./app/google-services.json
-      
+
     - name: Run tests
       run: ./gradlew test --stacktrace
 
